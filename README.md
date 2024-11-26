@@ -89,4 +89,4 @@ N/A
 
 # License
 
-Group.NET is license under the MIT license.
+Group.NET is license under the [MIT License](https://github.com/Thomas-Lazenby/Group.NET/blob/readme-md/LICENSE.txt).
