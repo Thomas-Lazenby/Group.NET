@@ -1,0 +1,36 @@
+name: Enhancement
+description: Suggest an enhancement for an existing feature.
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: feature_area
+    attributes:
+      label: Feature Area
+      placeholder: "Which feature or part of the product needs improvement?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: improvement_description
+    attributes:
+      label: Description of the Improvement
+      placeholder: "Describe the enhancement or improvement you have in mind."
+    validations:
+      required: true
+
+  - type: textarea
+    id: objectives
+    attributes:
+      label: Objective(s)
+      placeholder: |
+        List the goals or success criteria for the feature as a checklist (Hierarcheal checklists exist in github)
+
+        - [ ] Main goal: Add a new interactive element that appears on the main page to draw user attention.
+          - [ ] Subtask: Ensure the element is visually appealing.
+          - [ ] Subtask: Make the element accessible on all devices.
+        - [ ] Main goal: Ensure the element responds to user interactions, such as clicks, to enhance engagement.
+          - [ ] Subtask: Add a sound effect when clicked.
+          - [ ] Subtask: Test across different browsers.
+    validations:
+      required: true
