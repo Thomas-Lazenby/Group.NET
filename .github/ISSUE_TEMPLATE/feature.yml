@@ -1,0 +1,44 @@
+name: Feature
+description: Template for proposing a new feature or enhancement to improve the product. 
+labels:
+  - feature
+body:
+  - type: textarea
+    id: introduction
+    attributes:
+      label: Introduction
+      placeholder: "Briefly describe the feature's purpose, such as adding a new interactive element to enhance user engagement."
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: "Provide a detailed explanation of the new feature, such as adding an interactive element to improve user experience and engagement."
+    validations:
+      required: true
+    
+  - type: textarea
+    id: objectives
+    attributes:
+      label: Objective(s)
+      placeholder: |
+        List the goals or success criteria for the feature as a checklist (Hierarcheal checklists exist in github)
+
+        - [ ] Main goal: Add a new interactive element that appears on the main page to draw user attention.
+          - [ ] Subtask: Ensure the element is visually appealing.
+          - [ ] Subtask: Make the element accessible on all devices.
+        - [ ] Main goal: Ensure the element responds to user interactions, such as clicks, to enhance engagement.
+          - [ ] Subtask: Add a sound effect when clicked.
+          - [ ] Subtask: Test across different browsers.
+    validations:
+      required: true
+    
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      placeholder: "Provide links to design files, sound resources, or other relevant assets needed to implement this feature."
+    validations:
+      required: false

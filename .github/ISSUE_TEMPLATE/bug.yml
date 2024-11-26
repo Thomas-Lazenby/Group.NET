@@ -1,0 +1,42 @@
+name: Bug
+description: Template for reporting a bug, issue, or unexpected behavior.
+labels:
+  - bug
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      placeholder: "Provide a brief summary of the bug or issue. For example: 'Page crashes when clicking on submit button.'"
+    validations:
+      required: true
+  
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        List the steps to reproduce the bug. Include as much detail as possible.
+
+        1. Go to the main page.
+        2. Click on the 'Submit' button.
+        3. Observe that the page crashes with an error message.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      placeholder: "Describe what you expected to happen instead of the observed issue."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      placeholder: "Describe what actually happened when you followed the steps to reproduce."
+    validations:
+      required: true
+
