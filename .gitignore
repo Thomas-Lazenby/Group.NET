@@ -1,0 +1,20 @@
+# Build Folders
+bin/
+obj/
+
+# User-Specific Files
+.vscode/
+*.user
+*.rsuser
+*.suo
+
+# IDE Settings
+.vs/
+.idea/
+*.sln.ide
+*.code-workspace
+
+# Dependency Information
+project.nuget.cache
+*.nuget.g.props
+*.nuget.g.targets
