@@ -1,7 +1,7 @@
 ﻿namespace Group.NET
 {
     /// <summary> For Keys or Values to be flexiable I recommend using <see cref="object"/> </summary>
-    public class Group<TKey, TValue>
+    public class Group<TKey, TValue> : IGroupField<TKey, TValue>, IGroupSubGroup<TKey, TValue>, IGroupReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
         // DESIGN CHOICE REGARDING FLEXIBILITY:

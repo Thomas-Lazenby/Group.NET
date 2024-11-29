@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Group.NET
 {
 
-    public interface IFieldReadOnly<TKey, TValue>
+    public interface IGroupFieldReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
 
