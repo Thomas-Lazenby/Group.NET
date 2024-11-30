@@ -11,12 +11,10 @@ namespace Group.NET
         where TKey : IEquatable<TKey>
     {
 
-        /// <summary> Gets all fields. </summary>
         IEnumerable<TKey> GetKeysField();
 
         T GetField<T>(TKey key)
             where T : TValue;
-
 
         public bool TryGetField<T>(TKey key, out T? value)
             where T : TValue;

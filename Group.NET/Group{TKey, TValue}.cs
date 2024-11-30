@@ -1,7 +1,7 @@
 ﻿namespace Group.NET
 {
     /// <summary> For Keys or Values to be flexiable I recommend using <see cref="object"/> </summary>
-    public class Group<TKey, TValue> : IGroupField<TKey, TValue>, IGroupSubGroup<TKey, TValue>, IGroupReadOnly<TKey, TValue>
+    public class Group<TKey, TValue> : IGroup<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
         // DESIGN CHOICE REGARDING FLEXIBILITY:
@@ -14,34 +14,33 @@
         // Maybe things aswell such as: ChildFieldAdded etc.
 
 
-        private readonly Dictionary<TKey, Group<TKey, TValue>> _subGroups = new();
+        private readonly Dictionary<TKey, Group<TKey, TValue>> _childGroups = new();
         private readonly Dictionary<TKey, TValue> _fields = new();
 
-        public Group<TKey, TValue>? Parent { get; private set; }
+        public Group<TKey, TValue>? ParentGroup { get; private set; }
 
         public bool IsRootGroup
-            => Parent == null;
+            => ParentGroup == null;
 
         public Group<TKey, TValue> GetRootGroup()
         {
             var currentGroup = this;
             do
             {
-                if (currentGroup.Parent == null)
+                if (currentGroup.ParentGroup == null)
                     return currentGroup;
 
-                currentGroup = currentGroup.Parent;
+                currentGroup = currentGroup.ParentGroup;
             } while (true);
         }
 
         public bool ContainsKey(TKey key)
-            => _fields.ContainsKey(key) || _subGroups.ContainsKey(key);
+            => _fields.ContainsKey(key) || _childGroups.ContainsKey(key);
 
 
 
         #region Field Methods
 
-        /// <summary> Gets all fields. </summary>
         public IEnumerable<TKey> GetKeysField()
             => _fields.Keys;
 
@@ -123,29 +122,15 @@
 
         #endregion
 
-        #region SubGroup Methods
+        #region Child Methods
 
-        public IEnumerable<TKey> GetKeysSubGroup()
-            => _subGroups.Keys;
+        public IEnumerable<TKey> GetKeysForChildrenGroups()
+            => _childGroups.Keys;
 
-        /// <summary> Adds an existing group as a child. </summary>
-        public Group<TKey, TValue> CreateSubGroup(TKey key)
-            => InsertSubGroup(key, new Group<TKey, TValue>());
+        public Group<TKey, TValue> CreateChildGroup(TKey key)
+            => InsertChildGroup(key, new Group<TKey, TValue>());
 
-        /// <summary> Adds an existing group as a child. </summary>
-        public Group<TKey, TValue> InsertSubGroup(TKey key, Group<TKey, TValue> group)
-        {
-            if (ContainsKey(key))
-                throw new InvalidOperationException($"Key '{key}' is already in use by a subgroup or field.");
-
-            group.Parent = this;
-            _subGroups[key] = group;
-
-            return group;
-        }
-
-        /// <summary> Attempts to add a new subgroup with the specified key. Returns false if the key already exists. </summary>
-        public bool TryCreateSubGroup(TKey key, out Group<TKey, TValue> group)
+        public bool TryCreateChildGroup(TKey key, out Group<TKey, TValue> group)
         {
             if (ContainsKey(key))
             {
@@ -153,46 +138,53 @@
                 return false;
             }
 
-            group = new Group<TKey, TValue> { Parent = this };
-            _subGroups[key] = group;
+            group = new Group<TKey, TValue> { ParentGroup = this };
+            _childGroups[key] = group;
             return true;
         }
 
-        /// <summary> Attempts to insert an existing subgroup. Returns false if the key already exists. </summary>
-        public bool TryInsertSubGroup(TKey key, Group<TKey, TValue> group)
+        public Group<TKey, TValue> InsertChildGroup(TKey key, Group<TKey, TValue> group)
+        {
+            if (ContainsKey(key))
+                throw new InvalidOperationException($"Key '{key}' is already in use by a subgroup or field.");
+
+            group.ParentGroup = this;
+            _childGroups[key] = group;
+
+            return group;
+        }
+
+
+
+        public bool TryInsertChildGroup(TKey key, Group<TKey, TValue> group)
         {
             if (ContainsKey(key))
                 return false;
 
-            group.Parent = this;
-            _subGroups[key] = group;
+            group.ParentGroup = this;
+            _childGroups[key] = group;
             return true;
         }
 
-        /// <summary> Retrieves a subgroup by key. Throws an exception if the subgroup does not exist. </summary>
-        public Group<TKey, TValue> GetSubGroup(TKey key)
+        public Group<TKey, TValue> GetChildGroup(TKey key)
         {
-            if (!_subGroups.TryGetValue(key, out var group))
+            if (!_childGroups.TryGetValue(key, out var group))
                 throw new KeyNotFoundException($"Subgroup with key '{key}' does not exist.");
 
             return group;
         }
 
-        /// <summary> Attempts to retrieve a subgroup by key. </summary>
-        public bool TryGetSubGroup(TKey key, out Group<TKey, TValue>? group)
-            => _subGroups.TryGetValue(key, out group);
+        public bool TryGetChildGroup(TKey key, out Group<TKey, TValue>? group)
+            => _childGroups.TryGetValue(key, out group);
 
-        /// <summary> Removes a subgroup by key. Returns true if successful. </summary>
-        public bool RemoveSubGroup(TKey key)
-            => _subGroups.Remove(key);
+        public bool RemoveChildGroup(TKey key)
+            => _childGroups.Remove(key);
 
-        /// <summary> Attempts to remove a subgroup and retrieve its instance. </summary>
-        public bool TryRemoveSubGroup(TKey key, out Group<TKey, TValue>? group)
-            => _subGroups.Remove(key, out group);
+        public bool TryRemoveChildGroup(TKey key, out Group<TKey, TValue>? group)
+            => _childGroups.Remove(key, out group);
 
-        /// <summary> Checks if a subgroup with the given key exists. </summary>
-        public bool ExistsSubGroup(TKey key)
-            => _subGroups.ContainsKey(key);
+        public bool ExistsChildGroup(TKey key)
+            => _childGroups.ContainsKey(key);
 
         #endregion
 
