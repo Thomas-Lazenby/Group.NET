@@ -10,7 +10,6 @@ namespace Group.NET
     public interface IGroupFieldsReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
-
         IEnumerable<TKey> GetKeysField();
 
         T GetField<T>(TKey key)

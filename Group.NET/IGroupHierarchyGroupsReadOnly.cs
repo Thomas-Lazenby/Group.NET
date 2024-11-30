@@ -1,6 +1,6 @@
 ﻿namespace Group.NET
 {
-    public interface IGroupParentChildrenGroupsReadOnly<TKey, TValue>
+    public interface IGroupHierarchyGroupsReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
         Group<TKey, TValue>? ParentGroup { get; }
