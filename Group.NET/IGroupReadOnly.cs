@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Group.NET
 {
-    public interface IGroupReadOnly<TKey, TValue> : IGroupHierarchyGroupsReadOnly<TKey, TValue>, IGroupFieldsReadOnly<TKey, TValue>
+    public interface IGroupReadOnly<TKey, TValue> : IGroupHierarchyGroupsReadOnly<TKey, TValue>, IGroupFieldReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
 
