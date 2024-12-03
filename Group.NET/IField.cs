@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace Group.NET
 {
-    public interface IGroupField<TKey, TValue> : IGroupFieldReadOnly<TKey, TValue>
+    public interface IField<TKey, TValue> : IFieldReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
-        bool IsFieldsEmpty();
-
-        int CountFields();
-
         void ClearFields();
 
 

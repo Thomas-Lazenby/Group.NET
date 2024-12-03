@@ -7,17 +7,21 @@ using System.Threading.Tasks;
 namespace Group.NET
 {
 
-    public interface IGroupFieldReadOnly<TKey, TValue>
+    public interface IFieldReadOnly<TKey, TValue> : IReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
+        bool IsFieldsEmpty();
+
+        int CountFields();
+
         IEnumerable<TKey> GetKeysField();
+
+        bool ExistsField(TKey key);
 
         T GetField<T>(TKey key)
             where T : TValue;
 
         public bool TryGetField<T>(TKey key, out T? value)
             where T : TValue;
-
-        bool ExistsField(TKey key);
     }
 }

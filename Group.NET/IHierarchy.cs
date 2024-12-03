@@ -6,15 +6,9 @@ using System.Threading.Tasks;
 
 namespace Group.NET
 {
-    public interface IGroupHierarchy<TKey, TValue>
+    public interface IHierarchy<TKey, TValue> : IHierarchyReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
-
-        bool IsChildGroupsEmpty();
-
-        int CountChildGroups();
-
-
         void ClearChildGroups();
 
         void RemoveChildGroup(TKey key);

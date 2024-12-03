@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Group.NET.ConcurrentGroup
 {
-    public interface IConcurrentGroupField<TKey, TValue> : IGroupField<TKey, TValue>
+    public interface IConcurrentGroupField<TKey, TValue> : IField<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
         TValue GetOrAddField(TKey key, TValue value);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Group.NET.ConcurrentGroup
 {
-    public interface IConcurrentGroupHierarchyGroups<TKey, TValue> : IConcurrentGroupHierarchyGroupsReadOnly<TKey, TValue>
+    public interface IConcurrentGroupHierarchy<TKey, TValue> : IConcurrentGroupHierarchyReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
         ConcurrentGroup<TKey, TValue> CreateChildGroup(TKey key);

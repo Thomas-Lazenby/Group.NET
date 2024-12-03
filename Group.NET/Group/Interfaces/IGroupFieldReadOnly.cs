@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Group.NET.Group.Interfaces
 {
-    public interface IGroupGroupField<TKey, TValue> : IGroupField<TKey, TValue>
+    public interface IGroupFieldReadOnly<TKey, TValue> : IFieldReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
         Group<TKey, TValue> GetFieldsSnapshot();
