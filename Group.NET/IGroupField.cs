@@ -9,6 +9,13 @@ namespace Group.NET
     public interface IGroupField<TKey, TValue> : IGroupFieldReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
+        bool IsFieldsEmpty();
+
+        int CountFields();
+
+        void ClearFields();
+
+
         void AddField(TKey key, TValue value);
 
         bool TryAddField(TKey key, TValue value);
@@ -17,7 +24,7 @@ namespace Group.NET
 
         bool TryUpdateField(TKey key, TValue value);
 
-        bool RemoveField(TKey key);
+        void RemoveField(TKey key);
 
         bool TryRemoveField(TKey key);
     }
