@@ -10,16 +10,26 @@ namespace Group.NET
 {
     public partial class ConcurrentGroup<TKey, TValue> : IConcurrentGroupHierarchy<TKey, TValue>
     {
-        private readonly ConcurrentDictionary<TKey, ConcurrentGroup<TKey, TValue>> _childrenGroups = new();
-
         #region IConcurrentGroupHierarchyGroups<TKey, TValue>
 
         public ConcurrentGroup<TKey, TValue> CreateChildGroup(TKey key)
         {
-            if (!TryCreateChildGroup(key, out var newGroup))
+            var newGroup = new ConcurrentGroup<TKey, TValue>
             {
-                throw new InvalidOperationException($"A child group with key {key} already exists.");
+                ParentGroup = this
+            };
+
+            var newValue = new Value<ConcurrentGroup<TKey, TValue>>
+            {
+                Type = ValueType.ChildGroup,
+                Data = newGroup
+            };
+
+            if (!_values.TryAdd(key, newValue))
+            {
+                throw new InvalidOperationException($"A key '{key}' already exists as a {_values[key].Type}.");
             }
+
             return newGroup;
         }
 
@@ -30,36 +40,60 @@ namespace Group.NET
                 ParentGroup = this
             };
 
-            return _childrenGroups.TryAdd(key, group);
+            var newValue = new Value<ConcurrentGroup<TKey, TValue>>
+            {
+                Type = ValueType.ChildGroup,
+                Data = group
+            };
+
+            return _values.TryAdd(key, newValue);
         }
 
 
         public void InsertChildGroup(TKey key, ConcurrentGroup<TKey, TValue> group)
         {
+            var newValue = new Value<ConcurrentGroup<TKey, TValue>>
+            {
+                Type = ValueType.ChildGroup,
+                Data = group
+            };
 
-            if (_childrenGroups.TryAdd(key, group))
+            if (!_values.TryAdd(key, newValue))
             {
-                group.ParentGroup = this;
+                throw new InvalidOperationException($"A key '{key}' already exists as a {_values[key].Type}.");
             }
-            else
-            {
-                throw new InvalidOperationException($"A child group with key {key} already exists.");
-            }
+
+            group.ParentGroup = this;
         }
 
         public bool TryInsertChildGroup(TKey key, ConcurrentGroup<TKey, TValue> group)
         {
-            // Make this not set to parentgroup unless adeded
+            var newValue = new Value<ConcurrentGroup<TKey, TValue>>
+            {
+                Type = ValueType.ChildGroup,
+                Data = group
+            };
+
             group.ParentGroup = this;
-            return _childrenGroups.TryAdd(key, group);
+
+            return _values.TryAdd(key, newValue);
         }
 
         #endregion
 
         #region IGroupHierarchy<TKey, TValue>
-        
+
         public void ClearChildGroups()
-            => _childrenGroups.Clear();
+        {
+            foreach (var key in _values
+                .Where(kvp => kvp.Value.Type == ValueType.ChildGroup)
+                .Select(kvp => kvp.Key)
+                .ToList())
+            {
+                _values.TryRemove(key, out _);
+            }
+        }
+
 
         public void RemoveChildGroup(TKey key)
         {
@@ -70,7 +104,7 @@ namespace Group.NET
         }
 
         public bool TryRemoveChildGroup(TKey key)
-            => _childrenGroups.TryRemove(key, out _);
+            => _values.TryRemove(key, out var existing) && existing.Type == ValueType.ChildGroup;
 
         #endregion
 
@@ -117,19 +151,28 @@ namespace Group.NET
 
         public ConcurrentGroup<TKey, TValue> GetChildGroup(TKey key)
         {
-            if (!_childrenGroups.TryGetValue(key, out var group))
+            if (!_values.TryGetValue(key, out var existing) || existing.Type != ValueType.ChildGroup)
             {
-                throw new KeyNotFoundException($"No child group found with key {key}.");
+                throw new KeyNotFoundException($"No child group found with key '{key}'.");
             }
 
-            return group;
+            return ((Value<ConcurrentGroup<TKey, TValue>>)existing).Data;
         }
 
         public bool TryGetChildGroup(TKey key, out ConcurrentGroup<TKey, TValue>? group)
-            => _childrenGroups.TryGetValue(key, out group);
+        {
+            if (_values.TryGetValue(key, out var existing) && existing.Type == ValueType.ChildGroup)
+            {
+                group = ((Value<ConcurrentGroup<TKey, TValue>>)existing).Data;
+                return true;
+            }
+
+            group = null;
+            return false;
+        }
 
         public bool ExistsChildGroup(TKey key)
-            => _childrenGroups.ContainsKey(key);
+            => _values.TryGetValue(key, out var existing) && existing.Type == ValueType.ChildGroup;
 
         #endregion
 
@@ -147,15 +190,17 @@ namespace Group.NET
         }
 
         public bool IsChildGroupsEmpty()
-            => _childrenGroups.IsEmpty;
+            => !_values.Any(kvp => kvp.Value.Type == ValueType.ChildGroup);
 
         public int CountChildGroups()
-            => _childrenGroups.Count;
+            => _values.Count(kvp => kvp.Value.Type == ValueType.ChildGroup);
 
         public IEnumerable<TKey> GetKeysChildrenGroups()
-            => _childrenGroups.Keys;
+            => _values.Where(kvp => kvp.Value.Type == ValueType.ChildGroup).Select(kvp => kvp.Key);
 
         #endregion
 
     }
 }
+
+
