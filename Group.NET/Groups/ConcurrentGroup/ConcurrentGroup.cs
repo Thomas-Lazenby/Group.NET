@@ -13,10 +13,10 @@ namespace Group.NET
     public partial class ConcurrentGroup<TKey, TValue> : IConcurrentGroupField<TKey, TValue>, IConcurrentGroupHierarchy<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
+
+
+
         protected ConcurrentDictionary<TKey, IValueType> _values = new();
-
-
-
 
         public bool ContainsKey(TKey key)
             => _values.ContainsKey(key);

@@ -10,10 +10,23 @@ namespace Group.NET
 {
     public partial class ConcurrentGroup<TKey, TValue> : IConcurrentGroupHierarchy<TKey, TValue>
     {
+        protected ConcurrentDictionary<TKey, TKey> _groupMapping = new();
+        protected ConcurrentDictionary<(TKey groupID, TKey key), TValue> _fields = new();
+
+
+
         #region IConcurrentGroupHierarchyGroups<TKey, TValue>
 
         public ConcurrentGroup<TKey, TValue> CreateChildGroup(TKey key)
         {
+            // lock!
+            // groupMapping.Add(currentContextId, key)
+            // _fields.Add(etc.)
+            // make new concurrent group with:
+            // new Concurrent { ParentGroupID = currentCOntextId } etc. so gets parent.
+
+
+
             var newGroup = new ConcurrentGroup<TKey, TValue>
             {
                 ParentGroup = this
