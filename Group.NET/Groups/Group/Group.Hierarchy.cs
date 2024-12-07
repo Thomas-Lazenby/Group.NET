@@ -10,9 +10,43 @@ namespace Group.NET
         private readonly IDictionary<TKey, Group<TKey, TValue>> _childrenGroups = new Dictionary<TKey, Group<TKey, TValue>>();
         private Group<TKey, TValue>? _parentGroup;
 
+        public Group<TKey, TValue> CreateChildGroup(TKey key)
+        {
+            if (ContainsKey(key))
+            {
+                throw new InvalidOperationException($"Key '{key}' already exists.");
+            }
+
+            var childGroup = new Group<TKey, TValue>
+            {
+                _parentGroup = this
+            };
+
+            _childrenGroups[key] = childGroup;
+
+            return childGroup;
+        }
+
+        public void AddChildGroup(TKey key, Group<TKey, TValue> childGroup)
+        {
+            if (ContainsKey(key))
+            {
+                throw new InvalidOperationException($"Key '{key}' already exists.");
+            }
+
+            if (childGroup.ParentGroup != null)
+            {
+                throw new InvalidOperationException($"The child group already belongs to another parent.");
+            }
+
+            childGroup._parentGroup = this;
+            _childrenGroups[key] = childGroup;
+        }
+
         #region IGroupHierarchyReadOnly<TKey, TValue>
 
-        public Group<TKey, TValue>? ParentGroup => _parentGroup;
+        public Group<TKey, TValue>? ParentGroup
+            => _parentGroup;
 
         public Group<TKey, TValue> GetRootGroup()
         {
@@ -40,11 +74,17 @@ namespace Group.NET
 
         #region IHierarchy<TKey, TValue>
 
-        public bool IsRootGroup 
+        public bool IsRootGroup
             => _parentGroup == null;
 
         public void ClearChildGroups()
-            => _childrenGroups.Clear();
+        {
+            foreach (var childGroup in _childrenGroups.Values)
+            {
+                childGroup._parentGroup = null;
+            }
+            _childrenGroups.Clear();
+        }
 
         public int CountChildGroups()
             => _childrenGroups.Count;
@@ -60,14 +100,24 @@ namespace Group.NET
 
         public void RemoveChildGroup(TKey key)
         {
-            if (!_childrenGroups.Remove(key))
+            if (!_childrenGroups.Remove(key, out var deletedGroup))
             {
                 throw new KeyNotFoundException($"No child group found with key '{key}'.");
             }
+
+            deletedGroup._parentGroup = null;
         }
 
         public bool TryRemoveChildGroup(TKey key)
-            => _childrenGroups.Remove(key);
+        {
+            if (_childrenGroups.Remove(key, out var deletedGroup))
+            {
+                deletedGroup._parentGroup = null;
+                return true;
+            }
+
+            return false;
+        }
 
         #endregion
     }

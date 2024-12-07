@@ -25,7 +25,7 @@ namespace Group.NET
 
         public void AddField(TKey key, TValue value)
         {
-            if (_fields.ContainsKey(key))
+            if (ContainsKey(key))
             {
                 throw new InvalidOperationException($"Key '{key}' already exists.");
             }
@@ -37,7 +37,7 @@ namespace Group.NET
 
         public bool TryAddField(TKey key, TValue value)
         {
-            if (_fields.ContainsKey(key))
+            if (ContainsKey(key))
             {
                 return false;
             }
@@ -49,7 +49,7 @@ namespace Group.NET
 
         public void UpdateField(TKey key, TValue value)
         {
-            if (!_fields.ContainsKey(key))
+            if (!ContainsKey(key))
             {
                 throw new KeyNotFoundException($"No field found with key '{key}'.");
             }
@@ -60,7 +60,7 @@ namespace Group.NET
 
         public bool TryUpdateField(TKey key, TValue value)
         {
-            if (!_fields.ContainsKey(key))
+            if (!ContainsKey(key))
             {
                 return false;
             }

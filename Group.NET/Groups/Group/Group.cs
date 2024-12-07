@@ -8,6 +8,8 @@ namespace Group.NET
     public partial class Group<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
+
+        // TODO: Test for key conflictions in unit tests.
         public bool ContainsKey(TKey key)
             => _fields.ContainsKey(key) || _childrenGroups.ContainsKey(key);
 
