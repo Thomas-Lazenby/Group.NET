@@ -10,10 +10,6 @@ namespace Group.NET
 {
     public partial class ConcurrentGroup<TKey, TValue> : IConcurrentGroupHierarchy<TKey, TValue>
     {
-        protected ConcurrentDictionary<TKey, TKey> _groupMapping = new();
-        protected ConcurrentDictionary<(TKey groupID, TKey key), TValue> _fields = new();
-
-
 
         #region IConcurrentGroupHierarchyGroups<TKey, TValue>
 

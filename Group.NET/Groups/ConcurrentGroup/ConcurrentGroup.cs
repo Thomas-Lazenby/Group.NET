@@ -9,13 +9,20 @@ using Group.NET.ConcurrentGroup;
 
 namespace Group.NET
 {
-
+    [Obsolete("Not implemented yet")]
     public partial class ConcurrentGroup<TKey, TValue> : IConcurrentGroupField<TKey, TValue>, IConcurrentGroupHierarchy<TKey, TValue>
-        where TKey : IEquatable<TKey>
+        where TKey : notnull, IEquatable<TKey>
     {
+        
+
+        protected ConcurrentDictionary<TKey, ConcurrentGroup<TKey, TValue>> _childGroups = new();
+        protected ConcurrentDictionary<TKey, TValue> _fields = new();
+
+        protected object lockObject = new();
 
 
 
+        [Obsolete]
         protected ConcurrentDictionary<TKey, IValueType> _values = new();
 
         public bool ContainsKey(TKey key)

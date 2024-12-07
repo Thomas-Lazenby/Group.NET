@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Group.NET", "Group.NET\Group.NET.csproj", "{1D02C7CF-7788-48AF-AA57-6C30290951EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Group.NET.Tests", "Group.NET.Tests\Group.NET.Tests.csproj", "{1C44A858-1CF3-4E66-82E5-D707117211F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Group.NET.Tests", "Group.NET.Tests\Group.NET.Tests.csproj", "{1C44A858-1CF3-4E66-82E5-D707117211F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Group.NET.Benchmarks", "Group.NET.Benchmarks\Group.NET.Benchmarks.csproj", "{35FC0E15-3784-4F9A-A36E-C80290145E33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1C44A858-1CF3-4E66-82E5-D707117211F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C44A858-1CF3-4E66-82E5-D707117211F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C44A858-1CF3-4E66-82E5-D707117211F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35FC0E15-3784-4F9A-A36E-C80290145E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35FC0E15-3784-4F9A-A36E-C80290145E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35FC0E15-3784-4F9A-A36E-C80290145E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35FC0E15-3784-4F9A-A36E-C80290145E33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

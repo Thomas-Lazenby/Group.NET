@@ -9,6 +9,6 @@ namespace Group.NET.Group.Interfaces
     public interface IGroupFieldReadOnly<TKey, TValue> : IFieldReadOnly<TKey, TValue>
         where TKey : IEquatable<TKey>
     {
-        Group<TKey, TValue> GetFieldsSnapshot();
+        IDictionary<TKey, TValue> GetFieldsSnapshot();
     }
 }
